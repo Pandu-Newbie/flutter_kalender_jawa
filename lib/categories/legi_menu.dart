@@ -31,7 +31,6 @@ class _LegiMenuScreenState extends State<LegiMenuScreen> {
   void _fetchLegiData() {
     if (_selectedDate != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDate!);
-      // Cari data Legi berdasarkan tanggal yang dipilih
       LegiData? legi = LegiData.getLegiList().firstWhere(
         (data) => data.tanggal == formattedDate,
         orElse: () => LegiData(tanggal: formattedDate, informasi: "Tidak ada data untuk tanggal ini."),
@@ -45,37 +44,17 @@ class _LegiMenuScreenState extends State<LegiMenuScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Legi'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'Pilih Tanggal untuk Informasi Legi',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _pickDate,
-              child: Text('Pilih Tanggal'),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.blue.shade50,
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Text(
-                'Informasi Legi:\n\n$_informasiLegi',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-          ],
-        ),
+      appBar: AppBar(title: Text('Legi')),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: _pickDate,
+            child: Text('Pilih Tanggal'),
+          ),
+          const SizedBox(height: 20),
+          Text(_informasiLegi),
+        ],
       ),
     );
   }
