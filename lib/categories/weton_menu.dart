@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 
 
 class WetonMenuScreen extends StatefulWidget {
+  const WetonMenuScreen({super.key});
+
   @override
   _WetonMenuScreenState createState() => _WetonMenuScreenState();
 }

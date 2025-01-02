@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 
 
 class LegiMenuScreen extends StatefulWidget {
+  const LegiMenuScreen({super.key});
+
   @override
   _LegiMenuScreenState createState() => _LegiMenuScreenState();
 }

@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 
 
 class HariBaikMenuScreen extends StatefulWidget {
+  const HariBaikMenuScreen({super.key});
+
   @override
   _HariBaikMenuScreenState createState() => _HariBaikMenuScreenState();
 }
