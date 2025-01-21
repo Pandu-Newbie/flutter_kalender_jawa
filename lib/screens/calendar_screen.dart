@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../models/javanese_date_converter.dart'; // Import model logika
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -11,11 +12,14 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   DateTime? selectedDate;
   String javaneseCalendarInfo = "";
-  // Fungsi simulasi kalender info
+
+  // Fungsi untuk mendapatkan informasi kalender Jawa
   String getJavaneseCalendarInfo(DateTime date) {
-    // Replace this with actual Javanese calendar calculation logic
-    final formatter = DateFormat('EEEE, d MMMM y');
-    return "Tanggal: ${formatter.format(date)}\nPasaran: Legi\nWeton: Selasa Pon";
+    final javaneseDate = JavaneseDateConverter.convertToJavaneseDate(date);
+    final formatter = DateFormat('EEEE, d MMMM y', 'id'); // Format hari
+    return "Tanggal: ${formatter.format(date)}\n"
+        "Tanggal Jawa: ${javaneseDate['tanggal']} ${javaneseDate['bulan']} ${javaneseDate['tahun']}\n"
+        "Pasaran: Legi\nWeton: Selasa Pon"; // Sesuaikan pasaran & weton jika diperlukan
   }
 
   // Picker Tanggal
@@ -40,7 +44,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       children: [
         // Background Image
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/bg1.png'),
               fit: BoxFit.cover,
@@ -53,12 +57,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
             backgroundColor: Colors.transparent,
             elevation: 0,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
-            title: Text('Kalender Jawa', style: TextStyle(color: Colors.white)),
+            title: const Text(
+              'Kalender Jawa',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
           body: Column(
             children: [
@@ -84,7 +91,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       Center(
                         child: Text(
                           'Pilih Tanggal',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
@@ -103,7 +110,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             selectedDate == null
                                 ? 'Pilih Tanggal'
                                 : 'Ubah Tanggal',
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                           ),
                         ),
                       ),
@@ -119,7 +126,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Informasi Kalender Jawa',
                                       style: TextStyle(
                                         fontSize: 18,
@@ -138,7 +145,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                 ),
                               ),
                             )
-                          : Center(
+                          : const Center(
                               child: Text(
                                 'Silakan pilih tanggal untuk melihat kalender Jawa.',
                                 style: TextStyle(
