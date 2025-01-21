@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../models/javanese_date_converter.dart';
 
 // Import the category screens
 import 'package:flutter_kalender_jawa/categories/haribaik_menu.dart';
@@ -9,6 +11,14 @@ import 'package:flutter_kalender_jawa/categories/weton_menu.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  Future<Map<String, String>> _getTodayInfo() async {
+  DateTime today = DateTime.now();
+  String formattedDate = DateFormat('EEEE', 'id').format(today);
+  Map<String, String> todayInfo = await JavaneseDateConverter.convertToJavaneseDate(today);
+  todayInfo['formattedDate'] = formattedDate;
+  return todayInfo;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +34,10 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         Scaffold(
-          backgroundColor: Colors.transparent, // Make scaffold transparent
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            leading: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-            ),
           ),
           body: Column(
             children: [
@@ -68,64 +75,63 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        Container(
-                          padding: const EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.shade800,
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Informasi Hari Ini',
-                                style: TextStyle(
-                                  fontSize: 36,
-                                  color: Colors.white,
+                        FutureBuilder<Map<String, String>>(
+                          future: _getTodayInfo(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                  child: Text(
+                                      'Terjadi kesalahan. Coba lagi nanti.'));
+                            } else {
+                              // Data berhasil dimuat
+                              var todayInfo = snapshot.data!;
+                              return Container(
+                                padding: const EdgeInsets.all(16.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade800,
+                                  borderRadius: BorderRadius.circular(12.0),
                                 ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Hari ini adalah hari keberuntunga!',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Informasi Hari Ini',
+                                      style: TextStyle(
+                                        fontSize: 36,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      'Hari ini adalah ${todayInfo['formattedDate']} ${todayInfo['pasaran']}, ${todayInfo['tanggal']} ${todayInfo['bulan']} ${todayInfo['tahun']}.',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        // Tampilkan detail lainnya
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                      ),
+                                      child: Text(
+                                        'Lihat detail',
+                                        style: TextStyle(
+                                          color: Colors.blue.shade800,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              const SizedBox(height: 16),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                ),
-                                child: Text(
-                                  'Lihat detail',
-                                  style: TextStyle(
-                                    color: Colors.blue.shade800,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          '4 Hari Penting dalam Kalender Jawa',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Wrap(
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: [
-                            _buildEventCard(context, 'Legi', 'Pasaran', '1d:10Hr', Colors.purple),
-                            _buildEventCard(context, 'Hari Baik', 'Pasaran', '2d:5Hr', Colors.orange),
-                            _buildEventCard(context, 'Pon', 'Pasaran', '3d:8Hr', Colors.green),
-                            _buildEventCard(context, 'Weton', 'Pasaran', '4d:3Hr', Colors.red),
-                          ],
+                              );
+                            }
+                          },
                         ),
                         const SizedBox(height: 20),
                         Text(
@@ -173,21 +179,18 @@ class HomeScreen extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (context) => HariBaikMenuScreen()),
             );
-            // Implement navigation to Pahing menu if needed
             break;
           case 'Pon':
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => PonMenuScreen()),
             );
-            // Implement navigation to Pon menu if needed
             break;
           case 'Weton':
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => WetonMenuScreen()),
             );
-            // Implement navigation to Wage menu if needed
             break;
         }
       },
