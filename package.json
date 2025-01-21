@@ -1,0 +1,21 @@
+{
+  "name": "flutter_kalender_jawa",
+  "version": "1.0.0",
+  "description": "A new Flutter project.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@kalenderjawa/pustaka": "^1.0.0-rc.4",
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}
